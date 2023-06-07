@@ -1,6 +1,6 @@
 {
     "name": "yuyue8/tp-wechat",
-    "description": "thinkphp wechat",
+    "description": "thinkphp使用w7corp/easywechat，实现wechat常用功能和接口",
     "authors": [
         {
             "name": "yuyue8",
