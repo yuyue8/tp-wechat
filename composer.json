@@ -10,7 +10,9 @@
     "require": {
         "php": ">=8.0.2",
         "topthink/framework": "^6.0",
-        "w7corp/easywechat": "^6.7"
+        "w7corp/easywechat": "^6.7",
+        "yuyue8/tp_queue": "^1.0",
+        "yuyue8/tp_driver": "^1.0"
     },
     "require-dev": {
         
@@ -27,7 +29,8 @@
                 "Yuyue8\\TpWechat\\Service"
             ],
             "config": {
-                "tp_wechat": "src/config/tp_wechat.php"
+                "tp_wechat": "src/config/tp_wechat.php",
+                "template" : "src/config/template.php"
             }
         }
     }

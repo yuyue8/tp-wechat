@@ -10,6 +10,7 @@ use Symfony\Component\HttpFoundation\HeaderBag;
 use Symfony\Component\HttpFoundation\Request as HttpFoundationRequest;
 use think\facade\Config;
 use Yuyue8\TpWechat\interfaces\WechatInterface;
+use Yuyue8\TpWechat\jobs\WechatNoticeSendJobs;
 
 /**微信公众号
  * Class WechatService
@@ -136,6 +137,10 @@ abstract class WechatService implements WechatInterface
      */
     protected function subscribeEvent(Message $message) : string
     {
+        /** @var WechatNoticeSendJobs $wechatNoticeSendJobs */
+        $wechatNoticeSendJobs = app(WechatNoticeSendJobs::class);
+        $wechatNoticeSendJobs->dispatchDo('subscribe', [$message->FromUserName]);
+
         return '感谢您的关注！';
     }
 
@@ -147,7 +152,9 @@ abstract class WechatService implements WechatInterface
      */
     protected function unSubscribeEvent(Message $message)
     {
-
+        /** @var WechatNoticeSendJobs $wechatNoticeSendJobs */
+        $wechatNoticeSendJobs = app(WechatNoticeSendJobs::class);
+        $wechatNoticeSendJobs->dispatchDo('unsubscribe', [$message->FromUserName]);
     }
 
     /**
@@ -158,7 +165,9 @@ abstract class WechatService implements WechatInterface
      */
     protected function templateMessageNotice(Message $message)
     {
-
+        /** @var WechatNoticeSendJobs $wechatNoticeSendJobs */
+        $wechatNoticeSendJobs = app(WechatNoticeSendJobs::class);
+        $wechatNoticeSendJobs->dispatchDo('noticeFinish', [$message->MsgID, $message->Status]);
     }
 
     /**
