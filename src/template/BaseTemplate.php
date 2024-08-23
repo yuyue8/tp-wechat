@@ -26,7 +26,7 @@ abstract class BaseTemplate extends BaseStorage
      */
     protected function initialize(array $config)
     {
-        $this->config = Config::get($this->configFile . '.stores.' . $this->name , []);
+        $this->config = Config::get($this->configFile . '.stores.' . $this->name, []);
     }
 
     /**
@@ -36,7 +36,7 @@ abstract class BaseTemplate extends BaseStorage
      */
     protected function getTemplateCode(string $templateId)
     {
-        return $this->$this->config['template_id'][$templateId] ?? null;
+        return $this->config['template_id'][$templateId] ?? null;
     }
 
     /**
