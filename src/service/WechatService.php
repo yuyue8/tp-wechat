@@ -16,7 +16,7 @@ use Yuyue8\TpWechat\jobs\WechatNoticeSendJobs;
  * Class WechatService
  * @package service
  */
-abstract class WechatService implements WechatInterface
+class WechatService implements WechatInterface
 {
     /**
      * @var Application
@@ -40,13 +40,13 @@ abstract class WechatService implements WechatInterface
      * @param array $config
      * @return array
      */
-    public function setConfig(array $config) : array
+    public function setConfig(array $config): array
     {
         $this->config = $config;
 
         return $config;
     }
-    
+
     /**
      * 初始化
      * 
@@ -68,7 +68,7 @@ abstract class WechatService implements WechatInterface
      * 公众号服务
      *
      */
-    public function server() : ResponseInterface
+    public function server(): ResponseInterface
     {
         $request = request();
         $symfony_request = new HttpFoundationRequest($request->get(), $request->post(), [], $request->cookie(), [], [], $request->getContent());
@@ -90,17 +90,17 @@ abstract class WechatService implements WechatInterface
      */
     private function hook(Server $server)
     {
-        $server->addMessageListener('text',function($message, \Closure $next){
+        $server->addMessageListener('text', function ($message, \Closure $next) {
             return $this->textMessage($message);
         });
 
         //关注事件
-        $server->addEventListener('subscribe',function($message, \Closure $next){
+        $server->addEventListener('subscribe', function ($message, \Closure $next) {
             return $this->subscribeEvent($message);
         });
 
         //取消关注事件
-        $server->addEventListener('unsubscribe',function($message, \Closure $next){
+        $server->addEventListener('unsubscribe', function ($message, \Closure $next) {
 
             $this->unSubscribeEvent($message);
 
@@ -108,7 +108,7 @@ abstract class WechatService implements WechatInterface
         });
 
         //模板消息回执
-        $server->addEventListener('TEMPLATESENDJOBFINISH',function($message, \Closure $next){
+        $server->addEventListener('TEMPLATESENDJOBFINISH', function ($message, \Closure $next) {
 
             $this->templateMessageNotice($message);
 
@@ -124,7 +124,7 @@ abstract class WechatService implements WechatInterface
      * @param Message $message Content：消息内容
      * @return string
      */
-    protected function textMessage(Message $message) : string
+    protected function textMessage(Message $message): string
     {
         return $message->Content;
     }
@@ -135,7 +135,7 @@ abstract class WechatService implements WechatInterface
      * @param Message $message FromUserName：发送方OpenID
      * @return string
      */
-    protected function subscribeEvent(Message $message) : string
+    protected function subscribeEvent(Message $message): string
     {
         /** @var WechatNoticeSendJobs $wechatNoticeSendJobs */
         $wechatNoticeSendJobs = app(WechatNoticeSendJobs::class);
@@ -176,12 +176,12 @@ abstract class WechatService implements WechatInterface
      * @param string $code
      * @return array
      */
-    public function getUserInfo(string $openid) : array
+    public function getUserInfo(string $openid): array
     {
-        return json_decode($this->client()->get('cgi-bin/user/info',[
+        return json_decode($this->client()->get('cgi-bin/user/info', [
             'openid' => $openid,
             'lang'   => 'zh_CN'
-        ])->getContent(),true);
+        ])->getContent(), true);
     }
 
     /**
@@ -190,8 +190,8 @@ abstract class WechatService implements WechatInterface
      * @param array $data
      * @return array
      */
-    public function sendTemplateMessage(array $data) : array
+    public function sendTemplateMessage(array $data): array
     {
-        return json_decode($this->client()->postJson('cgi-bin/message/template/send',$data)->getContent(),true);
+        return json_decode($this->client()->postJson('cgi-bin/message/template/send', $data)->getContent(), true);
     }
 }
